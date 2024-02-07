@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useSearchParams, useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { z } from "zod";
 import { json } from "@remix-run/node"; // or cloudflare/deno
 
@@ -23,6 +23,7 @@ const queryParamsSchema = z.object({
 
 type QueryParamsSchema = z.infer<typeof queryParamsSchema>;
 
+// runs on the server
 export async function loader({ request }: RootLoaderProps) {
   const queryParamsStringified = Object.fromEntries(
     new URL(request.url).searchParams
@@ -40,7 +41,7 @@ export async function loader({ request }: RootLoaderProps) {
 
 // ?desiredPension=1&personalContribution=2&employerContribution=3&retirementAge=4
 export default function Index() {
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const {
     desiredPension,
@@ -48,6 +49,20 @@ export default function Index() {
     employerContribution,
     retirementAge,
   } = useLoaderData<typeof loader>();
+
+  // triggers loader rerun on server
+  function updatePage() {
+    const urlParams = new URLSearchParams({
+      desiredPension: Math.trunc(Math.random() * 10).toString(),
+      personalContribution: Math.trunc(Math.random() * 10).toString(),
+      employerContribution: Math.trunc(Math.random() * 10).toString(),
+      retirementAge: Math.trunc(Math.random() * 10).toString(),
+    });
+
+    navigate({
+      search: `?${urlParams}`,
+    });
+  }
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif" }}>
@@ -62,6 +77,9 @@ export default function Index() {
         <dt>retirementAge</dt>
         <dd>{retirementAge}</dd>
       </dl>
+      <button type="button" onClick={updatePage}>
+        Update
+      </button>
     </div>
   );
 }

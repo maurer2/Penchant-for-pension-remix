@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData, useNavigate, Form } from "@remix-run/react";
 import { z } from "zod";
 import { json } from "@remix-run/node"; // or cloudflare/deno
 
@@ -80,6 +80,24 @@ export default function Index() {
       <button type="button" onClick={updatePage}>
         Update
       </button>
+      <hr />
+      <Form action="/" method="get">
+        <label style={{ display: "block" }}>desiredPension
+          <input type="text" name="desiredPension" defaultValue={desiredPension} />
+        </label>
+        <label style={{ display: "block" }}>personalContribution
+          <input type="text" name="personalContribution" defaultValue={personalContribution} />
+        </label>
+        <label style={{ display: "block" }}>employerContribution
+          <input type="text" name="employerContribution" defaultValue={employerContribution} />
+        </label>
+        <label style={{ display: "block" }}>desiredPension
+          <input type="text" name="retirementAge" defaultValue={retirementAge} />
+        </label>
+        <button type="submit">
+          Update
+        </button>
+      </Form>
     </div>
   );
 }

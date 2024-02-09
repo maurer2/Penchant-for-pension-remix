@@ -1,7 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
-import { useLoaderData, useNavigate, Form } from "@remix-run/react";
+import type { MetaFunction , ActionFunctionArgs } from "@remix-run/node";
+import { useLoaderData, useNavigate, Form, useActionData, redirect } from "@remix-run/react";
 import { z } from "zod";
-import { json } from "@remix-run/node"; // or cloudflare/deno
+import { json } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,6 +14,8 @@ type RootLoaderProps = {
   request: Request;
 };
 
+type QueryParamsSchema = z.infer<typeof queryParamsSchema>;
+
 const queryParamsSchema = z.object({
   desiredPension: z.string().catch("1"),
   personalContribution: z.string().catch("2"),
@@ -21,7 +23,12 @@ const queryParamsSchema = z.object({
   retirementAge: z.string().catch("4"),
 });
 
-type QueryParamsSchema = z.infer<typeof queryParamsSchema>;
+const formFieldSchema = z.object({
+  desiredPension: z.string().min(1).pipe(z.coerce.number().int().nonnegative()),
+  personalContribution: z.string().min(1).pipe(z.coerce.number().int().nonnegative()),
+  employerContribution: z.string().min(1).pipe(z.coerce.number().int().nonnegative()),
+  retirementAge: z.string().min(1).pipe(z.coerce.number().int().positive()),
+});
 
 // runs on the server
 export async function loader({ request }: RootLoaderProps) {
@@ -39,16 +46,37 @@ export async function loader({ request }: RootLoaderProps) {
   }
 }
 
+// runs on the server
+export async function action({ request }: ActionFunctionArgs) {
+  const payload = await request.formData();
+  const formData = Object.fromEntries(payload);
+
+  const parserResult = formFieldSchema.safeParse(formData);
+  if (!parserResult.success) {
+    return parserResult.error.flatten();
+  }
+
+  const newUrlParams = new URLSearchParams({
+    desiredPension: parserResult.data.desiredPension.toString(),
+    personalContribution: parserResult.data.personalContribution.toString(),
+    employerContribution: parserResult.data.employerContribution.toString(),
+    retirementAge: parserResult.data.retirementAge.toString(),
+  });
+
+  // 30x status code
+  return redirect(`/?${newUrlParams.toString()}`);
+}
+
 // ?desiredPension=1&personalContribution=2&employerContribution=3&retirementAge=4
 export default function Index() {
   const navigate = useNavigate();
-
   const {
     desiredPension,
     personalContribution,
     employerContribution,
     retirementAge,
   } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
 
   // triggers loader rerun on server
   function updatePage() {
@@ -81,7 +109,7 @@ export default function Index() {
         Update
       </button>
       <hr />
-      <Form action="/" method="get">
+      <Form method="post">
         <label style={{ display: "block" }}>desiredPension
           <input type="text" name="desiredPension" defaultValue={desiredPension} />
         </label>
@@ -95,8 +123,11 @@ export default function Index() {
           <input type="text" name="retirementAge" defaultValue={retirementAge} />
         </label>
         <button type="submit">
-          Update
+          Submit
         </button>
+        <pre style={{ whiteSpace: "pre-wrap" }}>
+          {JSON.stringify(actionData, null, 4)}
+        </pre>
       </Form>
     </div>
   );

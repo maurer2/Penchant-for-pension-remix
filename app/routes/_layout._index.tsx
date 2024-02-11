@@ -2,11 +2,12 @@ import type { MetaFunction , ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate, Form, useActionData, redirect } from "@remix-run/react";
 import { z } from "zod";
 import { json } from "@remix-run/node";
+import { grid, button, input, subgrid, subgridBreak } from "./_layout.styles";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Penchant for pension remix" },
+    { name: "description", content: "Remix test" },
   ];
 };
 
@@ -93,42 +94,45 @@ export default function Index() {
   }
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif" }}>
-      <h1>Test</h1>
-      <dl>
-        <dt>desiredPension</dt>
-        <dd>{desiredPension}</dd>
-        <dt>personalContribution</dt>
-        <dd>{personalContribution}</dd>
-        <dt>employerContribution</dt>
-        <dd>{employerContribution}</dd>
-        <dt>retirementAge</dt>
-        <dd>{retirementAge}</dd>
-      </dl>
-      <button type="button" onClick={updatePage}>
-        Update
-      </button>
-      <hr />
-      <Form method="post">
-        <label style={{ display: "block" }}>desiredPension
-          <input type="text" name="desiredPension" defaultValue={desiredPension} />
-        </label>
-        <label style={{ display: "block" }}>personalContribution
-          <input type="text" name="personalContribution" defaultValue={personalContribution} />
-        </label>
-        <label style={{ display: "block" }}>employerContribution
-          <input type="text" name="employerContribution" defaultValue={employerContribution} />
-        </label>
-        <label style={{ display: "block" }}>desiredPension
-          <input type="text" name="retirementAge" defaultValue={retirementAge} />
-        </label>
-        <button type="submit">
-          Submit
+    <div className={grid}>
+      <section>
+        <dl className={subgrid}>
+          <dt>desiredPension</dt>
+          <dd>{desiredPension}</dd>
+          <dt>personalContribution</dt>
+          <dd>{personalContribution}</dd>
+          <dt>employerContribution</dt>
+          <dd>{employerContribution}</dd>
+          <dt>retirementAge</dt>
+          <dd>{retirementAge}</dd>
+        </dl>
+        <button type="button" onClick={updatePage} className={button}>
+          Update
         </button>
-        <pre style={{ whiteSpace: "pre-wrap" }}>
-          {JSON.stringify(actionData, null, 4)}
-        </pre>
-      </Form>
+      </section>
+      <section>
+        <Form method="post" className={subgrid}>
+          <label htmlFor="desiredPension">desiredPension</label>
+          <input type="text" name="desiredPension" id="desiredPension" defaultValue={desiredPension} className={input} />
+
+          <label htmlFor="personalContribution">personalContribution</label>
+          <input type="text" name="personalContribution" id="personalContribution" defaultValue={personalContribution} className={input} />
+
+          <label htmlFor="employerContribution">employerContribution</label>
+          <input type="text" name="employerContribution" id="employerContribution" defaultValue={employerContribution} className={input} />
+
+          <label htmlFor="retirementAge">desiredPension</label>
+          <input type="text" name="retirementAge" id="retirementAge" defaultValue={retirementAge} className={input} />
+
+          <button type="submit" className={button}>
+            Submit
+          </button>
+
+          <pre style={{ whiteSpace: "pre-wrap" }} className={subgridBreak}>
+            {JSON.stringify(actionData, null, 4)}
+          </pre>
+        </Form>
+      </section>
     </div>
   );
 }

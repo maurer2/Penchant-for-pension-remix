@@ -9,7 +9,9 @@
     "dev": "remix dev --manual",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit",
+    "test": "panda codegen && playwright test -c playwright-ct.config.ts",
+    "test:ui": "panda codegen && playwright test -c playwright-ct.config.ts --ui"
   },
   "dependencies": {
     "@remix-run/css-bundle": "^2.6.0",
@@ -23,7 +25,9 @@
   },
   "devDependencies": {
     "@pandacss/dev": "^0.30.2",
+    "@playwright/experimental-ct-react": "^1.41.2",
     "@remix-run/dev": "^2.6.0",
+    "@types/node": "^20.11.17",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",

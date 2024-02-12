@@ -10,12 +10,17 @@ export const grid = css({
   display: 'grid',
   gap: '2rem',
   gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-  marginBottom: '2rem',
+})
+
+export const title = css({
+  fontSize: '2rem',
+  marginBottom: '1rem',
 })
 
 export const button = css({
   padding: '0.5rem 1rem',
   border: '1px solid black',
+  cursor: 'pointer'
 })
 
 export const input = css({
@@ -32,4 +37,8 @@ export const subgrid = css({
 
 export const subgridBreak = css({
   gridColumn: '1/-1'
+})
+
+export const list = css({
+  marginBottom: '1rem'
 })

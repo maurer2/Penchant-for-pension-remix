@@ -2,7 +2,7 @@ import type { MetaFunction , ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate, Form, useActionData, redirect } from "@remix-run/react";
 import { z } from "zod";
 import { json } from "@remix-run/node";
-import { grid, button, input, subgrid, subgridBreak, list } from "./_layout.styles";
+import { grid, button, input, subgrid, subgridBreak, list } from "./root/styles";
 import { cx } from '../../styled-system/css';
 
 export const meta: MetaFunction = () => {

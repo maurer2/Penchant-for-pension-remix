@@ -1,5 +1,5 @@
 import { Outlet } from "@remix-run/react";
-import { wrapper, title } from "./_layout.styles";
+import { wrapper, title } from "./root/styles";
 
 export default function Layout() {
   return (

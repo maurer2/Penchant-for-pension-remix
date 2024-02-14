@@ -39,9 +39,10 @@ export async function loader({ request }: RootLoaderProps) {
   );
 
   try {
-    const queryParams: QueryParamsSchema = queryParamsSchema.parse(
-      queryParamsStringified
-    );
+    const queryParams: QueryParamsSchema = queryParamsSchema.parse(queryParamsStringified);
+
+    console.log(queryParams)
+
     return json(queryParams);
   } catch (error) {
     console.log(error);
@@ -129,9 +130,11 @@ export default function Index() {
             Submit
           </button>
 
-          <pre style={{ whiteSpace: "pre-wrap" }} className={subgridBreak}>
-            {JSON.stringify(actionData, null, 4)}
-          </pre>
+          <output>
+            <pre style={{ whiteSpace: "pre-wrap" }} className={subgridBreak}>
+              {JSON.stringify(actionData, null, 4)}
+            </pre>
+          </output>
         </Form>
       </section>
     </div>

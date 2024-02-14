@@ -17,6 +17,9 @@ dependencies:
   '@remix-run/serve':
     specifier: ^2.6.0
     version: 2.6.0(typescript@5.3.3)
+  '@remix-run/testing':
+    specifier: ^2.6.0
+    version: 2.6.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
   isbot:
     specifier: ^4.1.0
     version: 4.4.0
@@ -1886,6 +1889,26 @@ packages:
       set-cookie-parser: 2.6.0
       source-map: 0.7.4
       typescript: 5.3.3
+
+  /@remix-run/testing@2.6.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-hjIQxSke6ohccJrKKlB9j36W7pXesTR7+nkq68+A+NAZWt6wYCB+iSOKveqmtsmGiXnSOfFMhZcNNrMJjyRrLw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^18.0.0
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@remix-run/node': 2.6.0(typescript@5.3.3)
+      '@remix-run/react': 2.6.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      '@remix-run/router': 1.15.0
+      react: 18.2.0
+      react-router-dom: 6.22.0(react-dom@18.2.0)(react@18.2.0)
+      typescript: 5.3.3
+    transitivePeerDependencies:
+      - react-dom
+    dev: false
 
   /@remix-run/web-blob@3.1.0:
     resolution: {integrity: sha512-owGzFLbqPH9PlKb8KvpNJ0NO74HWE2euAn61eEiyCXX/oteoVzTVSN8mpLgDjaxBf2btj5/nUllSUgpyd6IH6g==}

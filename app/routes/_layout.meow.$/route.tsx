@@ -1,9 +1,9 @@
 import { Link } from "@remix-run/react";
 
-export default function Meow() {
+export default function MeowPage() {
   return (
     <div>
-      <h1>Meow</h1>
+      <h2>Meow</h2>
       <ul>
         <li>Matches <Link to='/meow'>/meow</Link></li>
         <li>Matches <Link to='/meow/'>/meow/</Link></li>

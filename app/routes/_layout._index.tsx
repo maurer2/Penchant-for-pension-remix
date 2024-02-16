@@ -34,15 +34,10 @@ const formFieldSchema = z.object({
 
 // runs on the server
 export async function loader({ request }: RootLoaderProps) {
-  const queryParamsStringified = Object.fromEntries(
-    new URL(request.url).searchParams
-  );
+  const queryParamsStringified = Object.fromEntries(new URL(request.url).searchParams);
 
   try {
     const queryParams: QueryParamsSchema = queryParamsSchema.parse(queryParamsStringified);
-
-    console.log(queryParams)
-
     return json(queryParams);
   } catch (error) {
     console.log(error);
@@ -95,24 +90,28 @@ export default function Index() {
     });
   }
 
+
   return (
     <div className={grid}>
-      <section>
-        <dl className={cx(subgrid, list)}>
-          <dt>desiredPension</dt>
-          <dd>{desiredPension}</dd>
-          <dt>personalContribution</dt>
-          <dd>{personalContribution}</dd>
-          <dt>employerContribution</dt>
-          <dd>{employerContribution}</dd>
-          <dt>retirementAge</dt>
-          <dd>{retirementAge}</dd>
+      <section data-testid="debug-section">
+        <dl className={cx(subgrid, list)} role="list">
+          <dt id="desiredPension-item">desiredPension</dt>
+          <dd aria-labelledby="desiredPension-item">{desiredPension}</dd>
+
+          <dt id="personalContribution-item">personalContribution</dt>
+          <dd aria-labelledby="personalContribution-item">{personalContribution}</dd>
+
+          <dt id="employerContribution-item">employerContribution</dt>
+          <dd aria-labelledby="employerContribution-item">{employerContribution}</dd>
+
+          <dt id="retirementAge-item">retirementAge</dt>
+          <dd aria-labelledby="retirementAge-item">{retirementAge}</dd>
         </dl>
         <button type="button" onClick={updatePage} className={button}>
           Update
         </button>
       </section>
-      <section>
+      <section data-testid="form-section">
         <Form method="post" className={subgrid}>
           <label htmlFor="desiredPension">desiredPension</label>
           <input type="text" name="desiredPension" id="desiredPension" defaultValue={desiredPension} className={input} />

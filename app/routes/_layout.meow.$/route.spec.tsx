@@ -12,7 +12,6 @@ describe("MeowPage", () => {
       {
         path: "/",
         Component: MeowPage,
-        // loader: () => ({}),
       },
     ]);
   });
@@ -31,6 +30,12 @@ describe("MeowPage", () => {
     render(<Component />);
 
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
+  });
+
+  it("should contain a list", async () => {
+    render(<Component />);
+
+    expect(screen.getByRole('list')).toBeInTheDocument();
   });
 
   it("should contain links", async () => {

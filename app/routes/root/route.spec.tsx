@@ -3,10 +3,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createRemixStub } from "@remix-run/testing";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import userEvent from "@testing-library/user-event";
 
 import IndexPage, { loader } from "../_layout._index";
+import * as layoutComponent from "../_layout._index";
 
 type LoaderReturnType = ReturnType<typeof useLoaderData<typeof loader>>;
+// type ActionReturnType = Awaited<ReturnType<typeof action>>;
 
 describe("IndexPage", () => {
   const loaderReturnData: LoaderReturnType = {
@@ -18,6 +21,7 @@ describe("IndexPage", () => {
 
   const renderWithRemixStub = (
     loaderData: LoaderReturnType = loaderReturnData,
+    actionFunction = layoutComponent.action,
     path = "/"
   ) => {
     const Component = createRemixStub([
@@ -27,12 +31,14 @@ describe("IndexPage", () => {
         loader() {
           return json(loaderData);
         },
-        // action() {
-        // },
+        action: actionFunction, // use real action
       },
     ]);
 
-    return render(<Component />);
+    return {
+      user: userEvent.setup(),
+      ...render(<Component />),
+    };
   };
 
   afterEach(() => {
@@ -66,5 +72,31 @@ describe("IndexPage", () => {
     expect(
       await screen.findByRole("definition", { name: "retirementAge" })
     ).toHaveTextContent("4");
+  });
+
+  it("should redirect to new route after successful submit", async () => {
+    const actionSpy = vi.spyOn(layoutComponent, "action");
+    const { user } = renderWithRemixStub();
+
+    expect(await screen.findByTestId("debug-section")).toBeInTheDocument();
+
+    expect(
+      await screen.getByLabelText("desiredPension", { selector: "input" })
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("button", { name: /Submit/i })
+    ).toBeInTheDocument();
+
+    await user.type(
+      await screen.getByLabelText("desiredPension", { selector: "input" }),
+      "500"
+    );
+
+    await user.click(await screen.findByRole("button", { name: /Submit/i }));
+    screen.debug();
+
+    expect(actionSpy).toHaveBeenCalled();
+
+    // todo check new route
   });
 });

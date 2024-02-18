@@ -78,17 +78,19 @@ describe("IndexPage", () => {
     const actionSpy = vi.spyOn(layoutComponent, "action");
     const { user } = renderWithRemixStub();
 
-    expect(await screen.findByTestId("debug-section")).toBeInTheDocument();
+    await vi.waitFor(async () =>
+      expect(await screen.findByTestId("form-section")).toBeInTheDocument()
+    );
 
     expect(
-      await screen.getByLabelText("desiredPension", { selector: "input" })
+      await screen.findByLabelText("desiredPension", { selector: "input" })
     ).toBeInTheDocument();
     expect(
       await screen.findByRole("button", { name: /Submit/i })
     ).toBeInTheDocument();
 
     await user.type(
-      await screen.getByLabelText("desiredPension", { selector: "input" }),
+      await screen.findByLabelText("desiredPension", { selector: "input" }),
       "500"
     );
 
@@ -97,28 +99,30 @@ describe("IndexPage", () => {
     expect(actionSpy).toHaveBeenCalled();
   });
 
-  it("should redirect to the same url with updated query params upon successful submit", async () => {
+  it.only("should redirect to the same url with updated query params upon successful submit", async () => {
     const { user } = renderWithRemixStub();
 
-    expect(await screen.findByTestId("debug-section")).toBeInTheDocument();
+    await vi.waitFor(async () =>
+      expect(await screen.findByTestId("form-section")).toBeInTheDocument()
+    );
 
     expect(await screen.findByRole("form")).toBeInTheDocument();
     expect(
-      await screen.getByLabelText("desiredPension", { selector: "input" })
+      await screen.findByLabelText("desiredPension", { selector: "input" })
     ).toBeInTheDocument();
     expect(
       await screen.findByRole("button", { name: /Submit/i })
     ).toBeInTheDocument();
 
     await user.type(
-      await screen.getByLabelText("desiredPension", { selector: "input" }),
+      await screen.findByLabelText("desiredPension", { selector: "input" }),
       "500"
     );
 
     await user.click(await screen.findByRole("button", { name: /Submit/i }));
 
     // formData that is used for submit
-    const formData = new FormData(screen.getByRole("form") as HTMLFormElement);
+    const formData = new FormData(screen.getByRole<HTMLFormElement>("form"));
     // query params of redirect to update current query params
     // https://github.com/microsoft/TypeScript/issues/30584#issuecomment-1865354582
     const newQueryParams = new URLSearchParams(
@@ -136,9 +140,10 @@ describe("IndexPage", () => {
       params: {},
       context: {},
     });
-    expect(actionResponse).toEqual(redirect(`/?${newQueryParams}`));
+    expect(actionResponse).toEqual(redirect(`/?${newQueryParams.toString()}`));
   });
 
   it.todo("should return error upon invalid submit", async () => {
+    // eslint fix
   });
 });

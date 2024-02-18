@@ -20,25 +20,25 @@ describe("MeowPage", () => {
     vi.clearAllMocks();
   });
 
-  it("should render", async () => {
+  it("should render", () => {
     const { container } = render(<Component initialEntries={['/']} />);
 
     expect(container).not.toBeEmptyDOMElement();
   });
 
-  it("should contain a page headline", async () => {
+  it("should contain a page headline", () => {
     render(<Component />);
 
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
   });
 
-  it("should contain a list", async () => {
+  it("should contain a list", () => {
     render(<Component />);
 
     expect(screen.getByRole('list')).toBeInTheDocument();
   });
 
-  it("should contain links", async () => {
+  it("should contain links", () => {
     render(<Component />);
 
     expect(screen.getAllByRole('link').length).toBeGreaterThan(0);

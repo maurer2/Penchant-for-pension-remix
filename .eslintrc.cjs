@@ -1,9 +1,3 @@
-/**
- * This is intended to be a basic starting point for linting in your app.
- * It relies on recommended configs out of the box for simplicity, but you can
- * and should modify this configuration to best suit your team's needs.
- */
-
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
@@ -18,6 +12,10 @@ module.exports = {
     browser: true,
     commonjs: true,
     es6: true,
+    jest: false,
+  },
+  rules: {
+    "import/prefer-default-export": "off",
   },
 
   // Base config
@@ -26,7 +24,7 @@ module.exports = {
   overrides: [
     // React
     {
-      files: ["**/*.{js,jsx,ts,tsx}"],
+      files: ["**/*.{js,jsx,ts,tsx,tsm}"],
       plugins: ["react", "jsx-a11y"],
       extends: [
         "plugin:react/recommended",
@@ -51,22 +49,29 @@ module.exports = {
 
     // Typescript
     {
-      files: ["**/*.{ts,tsx}"],
+      files: ["**/*.{ts,tsx,tsm}"],
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json"
+      },
       settings: {
         "import/internal-regex": "^~/",
         "import/resolver": {
           node: {
-            extensions: [".ts", ".tsx"],
+            extensions: [".ts", ".tsx", ".tsm"],
           },
           typescript: {
             alwaysTryTypes: true,
           },
         },
       },
+      rules: {
+        "@typescript-eslint/consistent-type-definitions": "off"
+      },
       extends: [
-        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/strict-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],

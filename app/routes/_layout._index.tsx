@@ -98,7 +98,7 @@ export default function IndexPage() {
         </button>
       </section>
       <section data-testid="form-section">
-        <Form method="post" className={subgrid}>
+        <Form method="post" className={subgrid} name="form">
           <label htmlFor="desiredPension">desiredPension</label>
           <input type="text" name="desiredPension" id="desiredPension" defaultValue={desiredPension} className={input} />
 

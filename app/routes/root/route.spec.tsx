@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createRemixStub } from "@remix-run/testing";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, redirect } from "@remix-run/react";
 import userEvent from "@testing-library/user-event";
 
 import IndexPage, { loader } from "../_layout._index";
@@ -74,7 +74,7 @@ describe("IndexPage", () => {
     ).toHaveTextContent("4");
   });
 
-  it("should redirect to new route after successful submit", async () => {
+  it("should call action upon submit", async () => {
     const actionSpy = vi.spyOn(layoutComponent, "action");
     const { user } = renderWithRemixStub();
 
@@ -93,10 +93,52 @@ describe("IndexPage", () => {
     );
 
     await user.click(await screen.findByRole("button", { name: /Submit/i }));
-    screen.debug();
 
     expect(actionSpy).toHaveBeenCalled();
+  });
 
-    // todo check new route
+  it("should redirect to the same url with updated query params upon successful submit", async () => {
+    const { user } = renderWithRemixStub();
+
+    expect(await screen.findByTestId("debug-section")).toBeInTheDocument();
+
+    expect(await screen.findByRole("form")).toBeInTheDocument();
+    expect(
+      await screen.getByLabelText("desiredPension", { selector: "input" })
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("button", { name: /Submit/i })
+    ).toBeInTheDocument();
+
+    await user.type(
+      await screen.getByLabelText("desiredPension", { selector: "input" }),
+      "500"
+    );
+
+    await user.click(await screen.findByRole("button", { name: /Submit/i }));
+
+    // formData that is used for submit
+    const formData = new FormData(screen.getByRole("form") as HTMLFormElement);
+    // query params of redirect to update current query params
+    // https://github.com/microsoft/TypeScript/issues/30584#issuecomment-1865354582
+    const newQueryParams = new URLSearchParams(
+      formData as unknown as Record<string, string>
+    );
+
+    // https://sergiodxa.com/tutorials/test-remix-loaders-and-actions
+    const targetRequest = new Request("http://localhost", {
+      method: "POST",
+      body: formData,
+    });
+
+    const actionResponse = await layoutComponent.action({
+      request: targetRequest,
+      params: {},
+      context: {},
+    });
+    expect(actionResponse).toEqual(redirect(`/?${newQueryParams}`));
+  });
+
+  it.todo("should return error upon invalid submit", async () => {
   });
 });

@@ -67,7 +67,8 @@ module.exports = {
         },
       },
       rules: {
-        "@typescript-eslint/consistent-type-definitions": "off"
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/consistent-type-imports": "warn"
       },
       extends: [
         "plugin:@typescript-eslint/strict-type-checked",

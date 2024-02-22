@@ -2,10 +2,12 @@ import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createRemixStub } from "@remix-run/testing";
 import { json } from "@remix-run/node";
-import { useLoaderData, redirect } from "@remix-run/react";
+import type { useLoaderData} from "@remix-run/react";
+import { redirect } from "@remix-run/react";
 import userEvent from "@testing-library/user-event";
 
-import IndexPage, { loader } from "../_layout._index";
+import type { loader } from "../_layout._index";
+import IndexPage from "../_layout._index";
 import * as layoutComponent from "../_layout._index";
 
 type LoaderReturnType = ReturnType<typeof useLoaderData<typeof loader>>;
@@ -99,7 +101,7 @@ describe("IndexPage", () => {
     expect(actionSpy).toHaveBeenCalled();
   });
 
-  it.only("should redirect to the same url with updated query params upon successful submit", async () => {
+  it("should redirect to the same url with updated query params upon successful submit", async () => {
     const { user } = renderWithRemixStub();
 
     await vi.waitFor(async () =>

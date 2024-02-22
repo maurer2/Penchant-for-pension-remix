@@ -1,7 +1,7 @@
 import type { MetaFunction , ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate, Form, useActionData, redirect } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import userEvent from '@testing-library/user-event';
+// import userEvent from '@testing-library/user-event';
 
 import { grid, button, input, subgrid, subgridBreak, list, code } from "./root/styles";
 import { cx } from '../../styled-system/css';
@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => {
 };
 
 // runs on the server
-export async function loader({ request }: RootLoaderProps) {
+export function loader({ request }: RootLoaderProps) {
   const queryParamsStringified = Object.fromEntries(new URL(request.url).searchParams);
 
   try {
